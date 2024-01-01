@@ -3,15 +3,13 @@
 import { ModeToggle } from "@/components/ModeToggle";
 import useScrollTop from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
+import { Session } from "@supabase/supabase-js";
+import Logo from "../logo";
 import SignInButton from "./_authButtons/signInButton";
-import Logo from "./logo";
 import SignOutButton from "./_authButtons/signOutButton";
-import useGetSession from "@/hooks/useGetSession";
-import { Spinner } from "@/components/spinner";
-export const NavBar = () => {
+
+export const NavBar = ({ session }: { session: Session | null }) => {
   const scroll = useScrollTop();
-  const { session, loading } = useGetSession();
-  console.log("Nav Barrrrrrr", session);
   return (
     <div
       className={cn(
@@ -21,10 +19,11 @@ export const NavBar = () => {
     >
       <Logo />
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
-        {loading && <Spinner />}
-        {session && !loading ? <SignOutButton /> : <SignInButton />}
+        {session ? <SignOutButton /> : <SignInButton />}
         <ModeToggle />
       </div>
     </div>
   );
 };
+
+//navBar.tsx render navBar Client
