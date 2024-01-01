@@ -1,4 +1,4 @@
-import NavBarServer from "./_components/_navBar/navBar-server";
+import { NavBar } from "./_components/navBar";
 
 export default function RootLayout({
   children,
@@ -7,7 +7,7 @@ export default function RootLayout({
 }) {
   return (
     <div className="h-full dark:bg-[#1F1F1F]">
-      <NavBarServer />
+      <NavBar />
       <main className="h-full pt-40">{children}</main>
     </div>
   );
