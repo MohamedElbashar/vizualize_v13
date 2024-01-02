@@ -1,16 +1,20 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
+import useGetDocuments from "@/hooks/useGetDocuments";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
+import GetRealTimeDocuments from "./getAllRealTime";
+import Item from "./item";
 import { UserItem } from "./userItems";
 
 export const Navigation = () => {
   const pathName = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
-
+  const { loading, documents } = useGetDocuments();
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navBarRef = useRef<ElementRef<"div">>(null);
@@ -113,10 +117,9 @@ export const Navigation = () => {
             <ChevronsLeft className="h-6 w-6" />
           </div>
           <UserItem />
+          <Item onClick={() => {}} label="New Note" icon={PlusCircle} />
         </div>
-        <div className="mt-4">
-          <p>Documents</p>
-        </div>
+        {!loading && <GetRealTimeDocuments serverDocuments={documents} />}
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}

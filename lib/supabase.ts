@@ -4,73 +4,64 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export interface Database {
   public: {
     Tables: {
       documents: {
         Row: {
-          content: string | null;
-          coverImage: string | null;
-          icon: string | null;
-          id: number;
-          isArchived: boolean;
-          isPublished: boolean;
-          parentDocument: number | null;
-          title: string;
-          userId: string;
-        };
+          content: string | null
+          coverImage: string | null
+          createdAt: string
+          icon: string | null
+          id: number
+          isArchived: boolean
+          isPublished: boolean
+          parentDocument: number | null
+          title: string
+          userId: string
+        }
         Insert: {
-          content?: string | null;
-          coverImage?: string | null;
-          icon?: string | null;
-          id?: number;
-          isArchived: boolean;
-          isPublished: boolean;
-          parentDocument?: number | null;
-          title: string;
-          userId: string;
-        };
+          content?: string | null
+          coverImage?: string | null
+          createdAt: string
+          icon?: string | null
+          id?: number
+          isArchived: boolean
+          isPublished: boolean
+          parentDocument?: number | null
+          title: string
+          userId: string
+        }
         Update: {
-          content?: string | null;
-          coverImage?: string | null;
-          icon?: string | null;
-          id?: number;
-          isArchived?: boolean;
-          isPublished?: boolean;
-          parentDocument?: number | null;
-          title?: string;
-          userId?: string;
-        };
-        Relationships: [];
-      };
-    };
+          content?: string | null
+          coverImage?: string | null
+          createdAt?: string
+          icon?: string | null
+          id?: number
+          isArchived?: boolean
+          isPublished?: boolean
+          parentDocument?: number | null
+          title?: string
+          userId?: string
+        }
+        Relationships: []
+      }
+    }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-}
-
-export interface IDocumentType {
-  content: string | null;
-  coverImage: string | null;
-  icon: string | null;
-  id: number;
-  isArchived: boolean;
-  isPublished: boolean;
-  parentDocument: number | null;
-  title: string;
-  userId: string;
+      [_ in never]: never
+    }
+  }
 }
 
 export type Tables<
@@ -84,7 +75,7 @@ export type Tables<
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
@@ -92,11 +83,11 @@ export type Tables<
       Database["public"]["Views"])
   ? (Database["public"]["Tables"] &
       Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R;
+      Row: infer R
     }
     ? R
     : never
-  : never;
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
@@ -107,17 +98,17 @@ export type TablesInsert<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I;
+      Insert: infer I
     }
     ? I
     : never
-  : never;
+  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
@@ -128,17 +119,17 @@ export type TablesUpdate<
     : never = never
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
   : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
   ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U;
+      Update: infer U
     }
     ? U
     : never
-  : never;
+  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
@@ -151,4 +142,4 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
   ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never;
+  : never
