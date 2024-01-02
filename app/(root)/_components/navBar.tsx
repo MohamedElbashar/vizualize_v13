@@ -4,12 +4,24 @@ import { ModeToggle } from "@/components/ModeToggle";
 import { Button } from "@/components/ui/button";
 import useScrollTop from "@/hooks/useScrollTop";
 import { cn } from "@/lib/utils";
-import { SignInButton, useSession, useUser } from "@clerk/nextjs";
+import { SignInButton, UserButton, useSession } from "@clerk/nextjs";
+import Link from "next/link";
 import Logo from "./logo";
+import { useEffect, useState } from "react";
+import { Spinner } from "@/components/spinner";
 
 export const NavBar = () => {
-  const { isLoaded, session, isSignedIn } = useSession();
+  const { isSignedIn } = useSession();
+  const [isLoading, setIsLoading] = useState(true);
+
   const scroll = useScrollTop();
+
+  useEffect(() => {
+    if (!isSignedIn) {
+      setIsLoading(false);
+    }
+  }, [isSignedIn]);
+
   return (
     <div
       className={cn(
@@ -19,7 +31,8 @@ export const NavBar = () => {
     >
       <Logo />
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
-        {isLoaded && (
+        {isLoading && <Spinner />}
+        {!isLoading && !isSignedIn && (
           <>
             <SignInButton mode="modal">
               <Button variant="ghost" size="sm">
@@ -29,8 +42,16 @@ export const NavBar = () => {
             </SignInButton>
 
             <SignInButton mode="modal">
-              <Button size="sm"> Get Started</Button>
+              <Button size="sm">Start Free</Button>
             </SignInButton>
+          </>
+        )}
+        {isSignedIn && (
+          <>
+            <Button variant="ghost" size="sm" asChild>
+              <Link href="/documents">Get Started</Link>
+            </Button>
+            <UserButton afterSignOutUrl="/" />
           </>
         )}
         <ModeToggle />
