@@ -1,10 +1,9 @@
 import { cn } from "@/lib/utils";
-import { useUser } from "@clerk/nextjs";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, TrashIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
-import { insertOne } from "../_action/insert-one";
+import { deleteById } from "../_action/delete-by-id";
 
 interface ItemProps {
   id?: number;
@@ -23,35 +22,18 @@ export default function Item({
   active,
   documentIcon,
 }: ItemProps) {
-  const { user } = useUser();
   const router = useRouter();
 
-  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onDelete = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-
-    const promise = insertOne({
-      title: "Untitled",
-      userId: user?.id ?? "",
-    });
-
+    const promise = deleteById(id).then(() => router.push("/documents"));
     toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note.",
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
     });
   };
-
-  // const onDelete = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-  //   event.stopPropagation();
-  //   if (!id) return;
-  //   const promise = deleteById(id).then(() => router.push("/documents"));
-  //   toast.promise(promise, {
-  //     loading: "Moving to trash...",
-  //     success: "Note moved to trash!",
-  //     error: "Failed to archive note.",
-  //   });
-  // };
 
   return (
     <div
@@ -69,6 +51,17 @@ export default function Item({
         <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
       )}
       <span className="truncate">{label}</span>
+      {!!id && (
+        <div className="ml-auto flex items-center gap-x-2">
+          <div
+            role="button"
+            onClick={onDelete}
+            className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+          >
+            <TrashIcon className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

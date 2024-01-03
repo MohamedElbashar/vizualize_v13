@@ -33,12 +33,47 @@ export default function GetRealTimeDocuments({
           setDocuments([...documents, payload.new as IDocumentType]);
         }
       )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "documents",
+        },
+        (payload) => {
+          setDocuments((prevDocuments) => {
+            return prevDocuments.filter((doc) => doc.id !== payload.old.id);
+          });
+        }
+      )
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "documents",
+        },
+        (payload) => {
+          setDocuments((prevDocuments: IDocumentType[]) => {
+            return prevDocuments.map((doc) => {
+              if (doc.id === payload.new.id) {
+                // This is the updated document, return the new version
+                return payload.new as IDocumentType;
+              } else {
+                // This is not the updated document, return it as is
+                return doc;
+              }
+            });
+          });
+        }
+      )
       .subscribe();
 
     return () => {
       supabase.removeChannel(channel);
     };
   }, [documents]);
+
   return (
     <>
       {documents.map((document: any) => (

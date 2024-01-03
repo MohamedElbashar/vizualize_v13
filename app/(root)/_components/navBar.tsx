@@ -22,7 +22,6 @@ export const NavBar = () => {
     }
   }, [isSignedIn]);
 
-  console.log(isLoading);
   return (
     <div
       className={cn(
