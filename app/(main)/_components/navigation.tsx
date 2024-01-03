@@ -1,20 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useGetDocuments from "@/hooks/useGetDocuments";
+import useGetDocuments from "@/hooks/use-get-documents";
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import {
+  ChevronsLeft,
+  FileIcon,
+  MenuIcon,
+  PlusCircle,
+  Settings,
+} from "lucide-react";
+import { useParams, usePathname } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
-import GetRealTimeDocuments from "./getAllRealTime";
+import { insertOne } from "../_action/insert-one";
+import GetRealTimeDocuments from "./get-all-real-time";
 import Item from "./item";
-import { UserItem } from "./userItems";
+import { UserItem } from "./user-items";
 
 export const Navigation = () => {
   const pathName = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const params = useParams();
+
   const { loading, documents } = useGetDocuments();
+
+  const { user } = useUser();
+
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
   const navBarRef = useRef<ElementRef<"div">>(null);
@@ -95,6 +109,19 @@ export const Navigation = () => {
       setTimeout(() => setIsResetting(false), 300);
     }
   };
+
+  const handleCreate = async () => {
+    const notes = insertOne({
+      title: "untitled",
+      userId: user?.id ?? "",
+    });
+
+    toast.promise(notes, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    });
+  };
   return (
     <>
       <aside
@@ -117,9 +144,23 @@ export const Navigation = () => {
             <ChevronsLeft className="h-6 w-6" />
           </div>
           <UserItem />
-          <Item onClick={() => {}} label="New Note" icon={PlusCircle} />
+          <Item
+            onClick={() => {
+              console.log("setting");
+            }}
+            label="Setting"
+            icon={Settings}
+          />
+
+          <Item onClick={handleCreate} label="New Note" icon={PlusCircle} />
         </div>
-        {!loading && <GetRealTimeDocuments serverDocuments={documents} />}
+        {!loading && (
+          <GetRealTimeDocuments
+            serverDocuments={documents}
+            FileIcon={FileIcon}
+            params={params}
+          />
+        )}
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}

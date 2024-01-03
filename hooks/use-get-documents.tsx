@@ -1,4 +1,4 @@
-import { getAll } from "@/app/(main)/_action/getAll";
+import { getAll } from "@/app/(main)/_action/get-all";
 import { useEffect, useState } from "react";
 
 const useGetDocuments = () => {

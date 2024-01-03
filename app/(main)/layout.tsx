@@ -1,10 +1,10 @@
 "use client";
 
-import { useAuth, useSession } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
-import { Navigation } from "./_components/navigation";
-import { useEffect, useState } from "react";
 import { Spinner } from "@/components/spinner";
+import { useSession } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Navigation } from "./_components/navigation";
 // ... (other imports)
 
 export default function MainLayout({

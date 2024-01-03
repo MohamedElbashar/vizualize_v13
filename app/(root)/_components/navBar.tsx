@@ -1,14 +1,14 @@
 "use client";
 
-import { ModeToggle } from "@/components/ModeToggle";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
-import useScrollTop from "@/hooks/useScrollTop";
+import useScrollTop from "@/hooks/use-scroll-top";
 import { cn } from "@/lib/utils";
 import { SignInButton, UserButton, useSession } from "@clerk/nextjs";
 import Link from "next/link";
-import Logo from "./logo";
 import { useEffect, useState } from "react";
-import { Spinner } from "@/components/spinner";
+import Logo from "./logo";
 
 export const NavBar = () => {
   const { isSignedIn } = useSession();
@@ -22,6 +22,7 @@ export const NavBar = () => {
     }
   }, [isSignedIn]);
 
+  console.log(isLoading);
   return (
     <div
       className={cn(

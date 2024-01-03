@@ -1,19 +1,27 @@
 "use client";
-import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { useUser } from "@clerk/nextjs";
 import { PlusCircle } from "lucide-react";
-import { insertOne } from "../../_action/insertOne";
+import Image from "next/image";
+import { toast } from "sonner";
+import { insertOne } from "../../_action/insert-one";
 
 export default function DocumentPage() {
   const { user } = useUser();
-  console.log(user?.id);
   //TODO: ERROR PAGE
   if (!user) return null;
 
-  const onClickHandler = async () => {
-    const documents = await insertOne({ title: "untitled", userId: user.id });
-    console.log(documents);
+  const handleCreate = async () => {
+    const notes = insertOne({
+      title: "untitled",
+      userId: user?.id ?? "",
+    });
+
+    toast.promise(notes, {
+      loading: "Creating a new note...",
+      success: "New note created!",
+      error: "Failed to create a new note.",
+    });
   };
   return (
     <div className="h-full flex flex-col items-center justify-center space-y-4">
@@ -21,7 +29,7 @@ export default function DocumentPage() {
       <h2 className="text-lg font-medium">
         Welcome to {user?.firstName}&apos;s Notes
       </h2>
-      <Button onClick={onClickHandler}>
+      <Button onClick={handleCreate}>
         <PlusCircle className="h-4 w-4 mr-2" />
         New Note
       </Button>

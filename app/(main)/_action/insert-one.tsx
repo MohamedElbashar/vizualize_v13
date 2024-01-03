@@ -16,7 +16,6 @@ export const insertOne = async ({
 }: InsertOneParams): Promise<IDocumentType | null> => {
   try {
     const supabase = createServerActionClient<Database>({ cookies });
-    console.log("createDocument", title, userId, parentDocument);
 
     const { data, error } = await supabase.from("documents").insert({
       title,
