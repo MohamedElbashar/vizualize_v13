@@ -8,10 +8,11 @@ import {
   ChevronsLeft,
   FileIcon,
   MenuIcon,
+  Plus,
   PlusCircle,
   Settings,
 } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { ElementRef, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useMediaQuery } from "usehooks-ts";
@@ -19,12 +20,14 @@ import { insertOne } from "../_action/insert-one";
 import GetRealTimeDocuments from "./get-all-real-time";
 import Item from "./item";
 import { UserItem } from "./user-items";
+import { useSettings } from "@/hooks/use-settings";
 
 export const Navigation = () => {
+  const settings = useSettings();
   const pathName = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const params = useParams();
-
+  const router = useRouter();
   const { loading, documents } = useGetDocuments();
 
   const { user } = useUser();
@@ -122,6 +125,12 @@ export const Navigation = () => {
       error: "Failed to create a new note.",
     });
   };
+
+  const onRedirect = (documentId: number) => {
+    const param = String(documentId);
+    router.push(`/documents/${param}`);
+  };
+
   return (
     <>
       <aside
@@ -135,7 +144,6 @@ export const Navigation = () => {
         <div>
           <div
             role="button"
-            onClick={collapse}
             className={cn(
               "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
               isMobile && "opacity-100"
@@ -144,23 +152,22 @@ export const Navigation = () => {
             <ChevronsLeft className="h-6 w-6" />
           </div>
           <UserItem />
-          <Item
-            onClick={() => {
-              console.log("setting");
-            }}
-            label="Setting"
-            icon={Settings}
-          />
+          <Item onClick={settings.onOpen} label="Setting" icon={Settings} />
 
           <Item onClick={handleCreate} label="New Note" icon={PlusCircle} />
         </div>
-        {!loading && (
-          <GetRealTimeDocuments
-            serverDocuments={documents}
-            FileIcon={FileIcon}
-            params={params}
-          />
-        )}
+        <div className="mt-4">
+          {!loading && (
+            <GetRealTimeDocuments
+              onRedirect={onRedirect}
+              serverDocuments={documents}
+              FileIcon={FileIcon}
+              params={params}
+            />
+          )}
+
+          <Item onClick={handleCreate} icon={Plus} label="Add a Note" />
+        </div>
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}

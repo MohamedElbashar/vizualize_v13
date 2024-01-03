@@ -1,8 +1,9 @@
+import { ModalProvider } from "@/components/utils/modal-provider";
 import { ThemeProvider } from "@/components/utils/themeProvider";
-import "./globals.css";
-import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Inter } from "next/font/google";
 import { Toaster } from "sonner";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -42,6 +43,7 @@ export default function RootLayout({
             storageKey="vizualize-theme"
           >
             <Toaster position="bottom-center" />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </body>
