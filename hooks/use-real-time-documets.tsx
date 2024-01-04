@@ -3,7 +3,7 @@ import supabase from "@/lib/supabaseConnection";
 
 export default function useRealtimeDocuments(
   documents: IDocumentType[],
-  setDocuments: any
+  setDocuments: any,
 ) {
   useEffect(() => {
     const channel = supabase
@@ -17,7 +17,7 @@ export default function useRealtimeDocuments(
         },
         (payload) => {
           setDocuments([...documents, payload.new]);
-        }
+        },
       )
       .on(
         "postgres_changes",
@@ -29,10 +29,10 @@ export default function useRealtimeDocuments(
         (payload) => {
           setDocuments((prevDocuments: any) => {
             return prevDocuments.filter(
-              (doc: any) => doc.id !== payload.old.id
+              (doc: any) => doc.id !== payload.old.id,
             );
           });
-        }
+        },
       )
       .on(
         "postgres_changes",
@@ -53,7 +53,7 @@ export default function useRealtimeDocuments(
               }
             });
           });
-        }
+        },
       )
       .subscribe();
 

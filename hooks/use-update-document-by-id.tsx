@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 const useUpdateDocument = (documentId: number) => {
   const [updatedData, setUpdatedData] = useState<Partial<IDocumentType>>({});
   const [updatedDocument, setUpdatedDocument] = useState<IDocumentType | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

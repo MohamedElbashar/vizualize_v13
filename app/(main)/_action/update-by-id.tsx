@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 export const updateById = async (
   documentId: number,
-  updatedData: Partial<IDocumentType>
+  updatedData: Partial<IDocumentType>,
 ): Promise<IDocumentType> => {
   try {
     const supabase = createServerActionClient<Database>({ cookies });

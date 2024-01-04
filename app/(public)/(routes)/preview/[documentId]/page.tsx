@@ -16,7 +16,7 @@ interface DocumentIdPageProps {
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
-    []
+    [],
   );
 
   const { document } = useGetDocumentById(params.documentId);

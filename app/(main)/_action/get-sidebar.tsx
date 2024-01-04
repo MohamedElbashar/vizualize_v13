@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 export const getSidebarNotes = async (
   parentDocument: number | undefined,
-  userId: string
+  userId: string,
 ) => {
   try {
     const supabase = createServerActionClient<Database>({ cookies });

@@ -16,12 +16,12 @@ interface IDocumentIdPageProps {
 const DocumentIdPage = ({ params }: IDocumentIdPageProps) => {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
-    []
+    [],
   );
 
   const { document } = useGetDocumentById(params.documentId);
   const { updatedDocument, handleUpdate } = useUpdateDocument(
-    params.documentId
+    params.documentId,
   );
   const initialDocument = updatedDocument ? updatedDocument : document;
   const onChange = async (content: string) => {
