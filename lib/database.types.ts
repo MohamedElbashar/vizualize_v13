@@ -15,9 +15,7 @@ export interface Database {
           coverImage: string | null;
           icon: string | null;
           id: number;
-          isArchived: boolean;
           isPublished: boolean;
-          parentDocument: number | null;
           title: string;
           userId: string;
         };
@@ -26,9 +24,7 @@ export interface Database {
           coverImage?: string | null;
           icon?: string | null;
           id?: number;
-          isArchived: boolean;
           isPublished: boolean;
-          parentDocument?: number | null;
           title: string;
           userId: string;
         };
@@ -37,9 +33,7 @@ export interface Database {
           coverImage?: string | null;
           icon?: string | null;
           id?: number;
-          isArchived?: boolean;
           isPublished?: boolean;
-          parentDocument?: number | null;
           title?: string;
           userId?: string;
         };
@@ -66,9 +60,7 @@ export interface IDocumentType {
   coverImage: string | null;
   icon: string | null;
   id: number;
-  isArchived: boolean;
   isPublished: boolean;
-  parentDocument: number | null;
   title: string;
   userId: string;
 }

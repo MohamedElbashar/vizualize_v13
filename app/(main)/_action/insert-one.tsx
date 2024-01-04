@@ -17,18 +17,22 @@ export const insertOne = async ({
   try {
     const supabase = createServerActionClient<Database>({ cookies });
 
-    const { data, error } = await supabase.from("documents").insert({
-      title,
-      parentDocument,
-      userId,
-      isPublished: false,
-      isArchived: false,
-    });
-
+    const { data, error } = await supabase
+      .from("documents")
+      .insert({
+        title,
+        parentDocument,
+        userId,
+        isPublished: false,
+        isArchived: false,
+      })
+      .select();
+    console.log(data);
     if (error) {
       throw new Error(error.message);
     }
-    return data;
+
+    return data as unknown as IDocumentType;
   } catch (err) {
     throw new Error(String(err));
   }

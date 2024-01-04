@@ -1,45 +1,44 @@
 "use client";
 
-import Editor from "@/components/editor";
-import { Toolbar } from "@/components/toolbar";
-import useGetDocumentById from "@/hooks/use-get-documet-by-id";
-import useUpdateDocument from "@/hooks/use-update-document-by-id";
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
 
-interface IDocumentIdPageProps {
+import { updateById } from "@/app/(main)/_action/update-by-id";
+import { Toolbar } from "@/components/toolbar";
+import useGetDocumentById from "@/hooks/use-get-documet-by-id";
+
+interface DocumentIdPageProps {
   params: {
     documentId: number;
   };
 }
 
-const DocumentIdPage = ({ params }: IDocumentIdPageProps) => {
+const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
     []
   );
 
   const { document } = useGetDocumentById(params.documentId);
-  const { updatedDocument, handleUpdate } = useUpdateDocument(
-    params.documentId
-  );
-  const initialDocument = updatedDocument ? updatedDocument : document;
+
   const onChange = async (content: string) => {
-    handleUpdate({
+    await updateById(params.documentId, {
       content,
     });
   };
+
   if (document === null) {
     return <div>Not found</div>;
   }
 
   return (
-    <div className="pb-40 pt-28">
+    <div className="pb-40">
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <Toolbar initialData={document} />
+        <Toolbar preview initialData={document} />
         <Editor
+          editable={false}
           onChange={onChange}
-          initialContent={initialDocument?.content || ""}
+          initialContent={document?.content ?? ""}
         />
       </div>
     </div>
