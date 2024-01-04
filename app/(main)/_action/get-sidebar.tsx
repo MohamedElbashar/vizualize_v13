@@ -2,18 +2,11 @@
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export const getSidebarNotes = async (
-  parentDocument: number | undefined,
-  userId: string,
-) => {
+export const getSidebarNotes = async (userId: string) => {
   try {
     const supabase = createServerActionClient<Database>({ cookies });
 
     let queryBuilder = supabase.from("documents").select().eq("userId", userId);
-
-    if (parentDocument !== undefined) {
-      queryBuilder = queryBuilder.eq("parentDocument", parentDocument);
-    }
 
     const { data: documents, error } = await queryBuilder.order("id", {
       ascending: false,

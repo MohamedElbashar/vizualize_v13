@@ -6,13 +6,11 @@ import { cookies } from "next/headers";
 interface InsertOneParams {
   title: string;
   userId: string;
-  parentDocument?: number;
 }
 
 export const insertOne = async ({
   title,
   userId,
-  parentDocument,
 }: InsertOneParams): Promise<IDocumentType | null> => {
   try {
     const supabase = createServerActionClient<Database>({ cookies });
@@ -21,13 +19,10 @@ export const insertOne = async ({
       .from("documents")
       .insert({
         title,
-        parentDocument,
         userId,
         isPublished: false,
-        isArchived: false,
       })
       .select();
-    console.log(data);
     if (error) {
       throw new Error(error.message);
     }
